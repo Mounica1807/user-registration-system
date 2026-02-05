@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'your-secret-key-here-change-this-in-production'  # change this!
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -91,3 +91,4 @@ SIMPLE_JWT = {
 }
 AUTH_USER_MODEL = 'accounts.CustomUser'
 ROOT_URLCONF = 'core.urls'
+ALLOWED_HOSTS = ['*'] 
