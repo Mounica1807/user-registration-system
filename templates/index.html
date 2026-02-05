@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --p:#6366f1; --pd:#4f46e5; --t:#1e293b; --tl:#64748b; --bg:#f8fafc;
+      --c:#ffffff; --s:#ecfdf5; --e:#fef2f2; --sh:0 10px 30px rgba(0,0,0,0.1);
+    }
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family:system-ui,sans-serif; background:var(--bg); color:var(--t);
+      min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem;
+    }
+    .card {
+      width:100%; max-width:460px; background:var(--c); border-radius:16px;
+      box-shadow:var(--sh); overflow:hidden; animation:fadeIn .6s ease-out;
+    }
+    @keyframes fadeIn {from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
+    .header {
+      background:linear-gradient(135deg,var(--p),var(--pd)); color:white;
+      padding:2.8rem 2rem 2.2rem; text-align:center;
+    }
+    .header h1 {font-size:2.1rem;margin-bottom:.4rem;}
+    .header p {opacity:.9;font-size:1.05rem;}
+    .body {padding:2.3rem 2rem;}
+    h2 {text-align:center;font-size:1.6rem;margin-bottom:1.8rem;}
+    .fg {position:relative;margin-bottom:1.5rem;}
+    label {
+      position:absolute;top:1rem;left:1.1rem;color:var(--tl);font-size:1rem;
+      pointer-events:none;transition:all .25s;
+    }
+    input {
+      width:100%;padding:1.3rem 1.1rem .6rem;border:1px solid #cbd5e1;border-radius:10px;
+      font-size:1.05rem;background:#fafafa;transition:all .25s;
+    }
+    input:focus,input:not(:placeholder-shown) {
+      background:white;border-color:var(--p);outline:none;
+      box-shadow:0 0 0 4px rgba(99,102,241,.1);
+    }
+    input:focus + label,input:not(:placeholder-shown) + label {
+      top:.6rem;font-size:.82rem;color:var(--p);font-weight:500;
+    }
+    .pw-wrap {position:relative;}
+    .toggle-pw {
+      position:absolute;right:1.1rem;top:50%;transform:translateY(-45%);
+      background:none;border:none;color:var(--tl);cursor:pointer;font-size:1.1rem;
+    }
+    .btn {
+      width:100%;padding:1.05rem;font-size:1.08rem;font-weight:600;
+      border:none;border-radius:10px;cursor:pointer;transition:all .25s;
+    }
+    .btn-p {background:var(--p);color:white;}
+    .btn-p:hover {background:var(--pd);transform:translateY(-1px);}
+    .alert {
+      margin:1.2rem 0;padding:1rem;border-radius:10px;font-size:.97rem;
+      display:flex;align-items:center;gap:.7rem;
+    }
+    .alert-s {background:var(--s);color:#065f46;border:1px solid #a7f3d0;}
+    .alert-e {background:var(--e);color:#991b1b;border:1px solid #fecaca;}
+    .switch {text-align:center;margin-top:1.4rem;color:var(--tl);font-size:.97rem;}
+    .switch a {color:var(--p);font-weight:600;text-decoration:none;}
+    .switch a:hover {text-decoration:underline;}
+    .profile {text-align:center;}
+    .profile-info {
+      background:var(--bg);border-radius:12px;padding:1.8rem;margin:1.5rem 0 2rem;
+      font-size:1.07rem;line-height:1.7;border:1px solid #e2e8f0;
+    }
+    .profile-info strong {display:inline-block;min-width:110px;color:var(--p);}
+    .hidden {display:none !important;}
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <h1>Account Center</h1>
+    <p>Secure access to your account</p>
+  </div>
+
+  <div class="body">
+
+    <div id="auth">
+      <div id="reg">
+        <h2>Create Account</h2>
+        <form id="regForm">
+          <div class="fg"><input type="email" id="r-email" placeholder=" " required autocomplete="email"/><label for="r-email">Email</label></div>
+          <div class="fg"><input type="text" id="r-user" placeholder=" " required autocomplete="username"/><label for="r-user">Username</label></div>
+          <div class="fg pw-wrap">
+            <input type="password" id="r-pass" placeholder=" " required minlength="6" autocomplete="new-password"/>
+            <label for="r-pass">Password</label>
+            <button type="button" class="toggle-pw">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <button type="submit" class="btn btn-p">Sign Up</button>
+        </form>
+        <div class="switch">Already have an account? <a href="#" id="to-login">Sign in</a></div>
+      </div>
+
+      <div id="login" class="hidden">
+        <h2>Sign In</h2>
+        <form id="loginForm">
+          <div class="fg"><input type="email" id="l-email" placeholder=" " required autocomplete="email"/><label for="l-email">Email</label></div>
+          <div class="fg pw-wrap">
+            <input type="password" id="l-pass" placeholder=" " required autocomplete="current-password"/>
+            <label for="l-pass">Password</label>
+            <button type="button" class="toggle-pw">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <button type="submit" class="btn btn-p">Sign In</button>
+        </form>
+        <div class="switch">Don't have an account? <a href="#" id="to-reg">Create one</a></div>
+      </div>
+
+      <div id="msg" class="alert hidden"></div>
+    </div>
+
+    <div id="profile" class="hidden">
+      <div class="profile-container">
+        <div class="profile-header">
+          <h2>Your Account</h2>
+        </div>
+
+      <div class="profile-card">
+          <div class="profile-row">
+            <span class="label">User ID</span>
+            <span id="p-id" class="value"></span>
+          </div>
+          <div class="profile-row">
+            <span class="label">Email</span>
+            <span id="p-email" class="value"></span>
+        </div>
+        <div class="profile-row">
+          <span class="label">Username</span>
+          <span id="p-user" class="value"></span>
+        </div>
+      </div>
+
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
+  </div>
+</div>
+
+<style>
+  .profile-container {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .profile-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+    font-weight: 600;
+  }
+
+  .profile-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    padding: 1.8rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
+  }
+
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 1.05rem;
+  }
+
+  .profile-row:last-child {
+    border-bottom: none;
+  }
+
+  .label {
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  .value {
+    color: #1e293b;
+    font-weight: 600;
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #ef4444;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .logout-btn:hover {
+    background: #dc2626;
+  }
+</style>
+
+  </div>
+</div>
+
+<script>
+  const API = '/api/';
+  const TOKEN_KEY = 'access_token';
+
+  const $ = id => document.getElementById(id);
+  const show = id => $(id)?.classList.remove('hidden');
+  const hide = id => $(id)?.classList.add('hidden');
+
+  function showAlert(text, isError = false) {
+    const alert = $('msg');
+    if (!alert) return;
+    alert.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-check-circle'}"></i> ${text}`;
+    alert.className = `alert ${isError ? 'alert-e' : 'alert-s'} visible`;
+    show('msg');
+    setTimeout(() => hide('msg'), 5000);
+  }
+
+  function showAuth() {
+    hide('profile');
+    show('auth');
+    show('reg');
+  }
+
+  function showProfile(user) {
+    $('p-id').textContent = user.id;
+    $('p-email').textContent = user.email;
+    $('p-user').textContent = user.username;
+    hide('auth');
+    show('profile');
+  }
+
+  // Only check profile if token exists
+  if (localStorage.getItem(TOKEN_KEY)) {
+    fetchProfile();
+  } else {
+    showAuth();
+  }
+
+  $('regForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      email: $('r-email').value.trim(),
+      username: $('r-user').value.trim(),
+      password: $('r-pass').value
+    };
+
+    try {
+      const res = await fetch(API + 'register/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        showAlert('Account created! Please sign in.');
+        $('regForm').reset();
+        hide('reg');
+        show('login');
+      } else {
+        showAlert(result.detail || result.email?.[0] || result.username?.[0] || result.password?.[0] || 'Registration failed', true);
+      }
+    } catch {
+      showAlert('Network error', true);
+    }
+  });
+
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      email: $('l-email').value.trim(),
+      password: $('l-pass').value
+    };
+
+    try {
+      const res = await fetch(API + 'login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem(TOKEN_KEY, result.access);
+        showAlert('Signed in successfully');
+        fetchProfile();
+      } else {
+        showAlert(result.detail || 'Invalid credentials', true);
+      }
+    } catch {
+      showAlert('Network error', true);
+    }
+  });
+
+  async function fetchProfile() {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return showAuth();
+
+    try {
+      const res = await fetch(API + 'profile/', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        showProfile(await res.json());
+      } else {
+        localStorage.removeItem(TOKEN_KEY);
+        showAlert('Session expired. Please sign in again.', true);
+        showAuth();
+      }
+    } catch {
+      showAlert('Could not load profile', true);
+      showAuth();
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem(TOKEN_KEY);
+    showAlert('Signed out successfully');
+    showAuth();
+  }
+
+
+  $('to-login').onclick = e => { e.preventDefault(); hide('reg'); show('login'); };
+  $('to-reg').onclick   = e => { e.preventDefault(); hide('login'); show('reg'); };
+
+ 
+  document.querySelectorAll('.toggle-pw').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const input = this.parentElement.querySelector('input[type="password"], input[type="text"]');
+      const icon = this.querySelector('i');
+      if (!input || !icon) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+  });
+</script>
+</body>
+</html>
