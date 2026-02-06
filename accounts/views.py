@@ -27,5 +27,4 @@ class ProfileView(generics.RetrieveAPIView):
         return self.request.user
     
 class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
     permission_classes = [AllowAny]
