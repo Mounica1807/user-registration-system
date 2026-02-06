@@ -17,6 +17,7 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
     permission_classes = [AllowAny]
 
 class ProfileView(generics.RetrieveAPIView):
@@ -25,7 +26,3 @@ class ProfileView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
-    
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-    permission_classes = [AllowAny]
