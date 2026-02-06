@@ -228,10 +228,12 @@
     setTimeout(() => hide('msg'), 5000);
   }
 
-  function showAuth() {
+  function showAuth(defaultForm = 'reg') {
     hide('profile');
     show('auth');
-    show('reg');
+    hide('reg');
+    hide('login');
+    show(defaultForm);
   }
 
   function showProfile(user) {
@@ -242,13 +244,14 @@
     show('profile');
   }
 
-  // Only check profile if token exists
+  // On load: only check profile if token exists
   if (localStorage.getItem(TOKEN_KEY)) {
     fetchProfile();
   } else {
     showAuth();
   }
 
+  // Register
   $('regForm').addEventListener('submit', async e => {
     e.preventDefault();
     const data = {
@@ -269,8 +272,7 @@
       if (res.ok) {
         showAlert('Account created! Please sign in.');
         $('regForm').reset();
-        hide('reg');
-        show('login');
+        showAuth('login'); // switch to login after register
       } else {
         showAlert(result.detail || result.email?.[0] || result.username?.[0] || result.password?.[0] || 'Registration failed', true);
       }
@@ -279,6 +281,7 @@
     }
   });
 
+  // Login
   $('loginForm').addEventListener('submit', async e => {
     e.preventDefault();
     const data = {
@@ -332,28 +335,22 @@
   function logout() {
     localStorage.removeItem(TOKEN_KEY);
     showAlert('Signed out successfully');
-    showAuth();
+    showAuth('reg'); // always show register form after logout
   }
 
+  // Form switching
+  $('to-login').onclick = e => { e.preventDefault(); showAuth('login'); };
+  $('to-reg').onclick   = e => { e.preventDefault(); showAuth('reg'); };
 
-  $('to-login').onclick = e => { e.preventDefault(); hide('reg'); show('login'); };
-  $('to-reg').onclick   = e => { e.preventDefault(); hide('login'); show('reg'); };
-
- 
+  // Password toggle
   document.querySelectorAll('.toggle-pw').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const input = this.parentElement.querySelector('input[type="password"], input[type="text"]');
-      const icon = this.querySelector('i');
+    btn.addEventListener('click', () => {
+      const input = btn.previousElementSibling;
+      const icon = btn.querySelector('i');
       if (!input || !icon) return;
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-      } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-      }
+      input.type = input.type === 'password' ? 'text' : 'password';
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
     });
   });
 </script>
