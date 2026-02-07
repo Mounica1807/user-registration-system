@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import RegisterView, ProfileView
+from accounts.views import RegisterView, ProfileView
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 
