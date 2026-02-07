@@ -16,6 +16,7 @@ def create_superuser(request):
             password='mouni123'  # ← CHANGE THIS to a strong password you remember
         )
         return HttpResponse("Superuser created! Now login at /admin/")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
