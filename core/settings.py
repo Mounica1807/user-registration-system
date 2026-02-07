@@ -97,3 +97,9 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': dj_database_url.config(default='sqlite:///db.sqlite3')
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://user-registration-system-eqdo.onrender.com', 
+    'https://*.onrender.com',          
+    'https://user-registration-system-eqdo.onrender.com/admin/login/?next=/admin/'                    
+]
