@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 
-# Temporary superuser creation/reset (remove after use!)
+# TEMPORARY FUNCTION - only to reset/create superuser (REMOVE AFTER USE!)
 def create_superuser(request):
     User = get_user_model()
     email = 'mouni@gmail.com'  # your email
@@ -14,9 +14,9 @@ def create_superuser(request):
         User.objects.create_superuser(
             email=email,
             username='mouni',
-            password='mouni1807'  # CHANGE THIS PASSWORD NOW!
+            password='mouni1807'  # CHANGE THIS TO A PASSWORD YOU WILL REMEMBER
         )
-        return HttpResponse("Superuser created! Login at /admin/")
+        return HttpResponse("Superuser created! Now login at /admin/")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
